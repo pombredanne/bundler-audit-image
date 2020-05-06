@@ -1,0 +1,51 @@
+= bundler-audit-image
+Otto Group Solution Provider (OSP) GmbH
+
+Docker image for Ruby gem build-audit
+
+== Initializing
+
+For local development checkout the source code:
+
+[source,bash]
+----
+cd <my_path> <1>
+git clone <project> <2>
+----
+<1> Go to a local path of your choice
+<2> Clone git project with clone address from github repository
+
+== Usage
+
+Identify the `Gemfile.lock` of your application.
+Run the docker container mounting the volume with your `Gemfile.lock` into
+`/usr/src/app`.
+
+[source,bash]
+----
+docker run --rm -v /path/to/your/app:/usr/src/app \
+  movex/bundler-audit-image:master_latest
+----
+
+Or directly from directory with gemfiles
+
+[source,bash]
+----
+docker run --rm -v "${PWD}":/usr/src/app \
+  movex/bundler-audit-image:master_latest
+----
+
+If the lock file has a different name use environment variable `GEMFILE_LOCK`
+to provide that name.
+
+[source,bash]
+----
+PATH_TO_APP=/path/to/your/app
+GEMFILE_LOCK=GemfileWithDifferentName.lock
+docker run --rm -v ${PATH_TO_APP}:/usr/src/app -e GEMFILE_LOCK=${GEMFILE_LOCK} \
+  movex/bundler-audit-image:master_latest
+----
+
+== References
+
+https://github.com/rubysec/bundler-audit
