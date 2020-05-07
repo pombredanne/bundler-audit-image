@@ -17,7 +17,7 @@ jobs:
     - name: Prepare tag name
       run: IMAGE_TAG="movex/bundler-audit-image:${GITHUB_RUN_NUMBER}_$(date +%s)"
     - name: Build the Docker image
-      run: ->
+      run: >-
            docker build . --file Dockerfile --label GITHUB_REF=${GITHUB_REF}
            --label GITHUB_SHA=${GITHUB_SHA} --tag "${IMAGE_TAG}"
     # Use credentials manager for docker. For installation hints see
