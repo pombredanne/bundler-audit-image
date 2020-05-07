@@ -65,7 +65,7 @@ jobs:
       run: pass init "cicd@foo.bar"
     - name: Configure docker credentials store
       run: |
-           cat >${HOME}/.docker/config.json <<EOF
+           mkdir -p ${HOME}/.docker && cat >${HOME}/.docker/config.json <<EOF
            {
              "credsStore": "pass"
            }
