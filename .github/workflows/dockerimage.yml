@@ -15,7 +15,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Prepare tag name
-      run: IMAGE_TAG="movex/bundler-audit-image:${GITHUB_RUN_NUMBER}_$(date +%s)"
+      run: export IMAGE_TAG="movex/bundler-audit-image:${GITHUB_RUN_NUMBER}_$(date +%s)"
     - name: Build the Docker image
       run: >-
            docker build . --file Dockerfile --label GITHUB_REF=${GITHUB_REF}
