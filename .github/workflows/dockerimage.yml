@@ -24,8 +24,8 @@ jobs:
     # https://github.com/docker/docker-credential-helpers/issues/102
     - name: Update OS package repository
       run: sudo apt-get update
-    - name: Install credentials manager
-      run: sudo apt-get install -y --no-install-recommends pass build-essential
+    - name: Install credentials manager, build tools, gpg2
+      run: sudo apt-get install -y --no-install-recommends pass build-essential gnupg2
     - name: Install go for building docker-credential-helpers
       run: sudo snap install --classic go
     - name: Set GOPATH
