@@ -34,14 +34,15 @@ jobs:
     - name: Get docker-credential-helpers source
       run: go get github.com/docker/docker-credential-helpers
       continue-on-error: true
-    - name: Change into docker-credential-helpers dir
-      run: pushd $GOPATH/src/github.com/docker/docker-credential-helpers
     - name: Build docker-credential-helpers
+      working-directory: "${GOPATH}/src/github.com/docker/docker-credential-helpers"
       run: make pass
     - name: Put docker-credential-pass into $PATH
-      run: sudo cp bin/docker-credential-pass /usr/local/bin
-    - name: Return to working directory
-      run: popd
+      run: >-
+           sudo cp
+           "${GOPATH}/src/github.com/docker/docker-credential-helpers/bin/docker-credential-pass"
+           /usr/local/bin
+
     - name: Generate gpg2 key
       env:
         GPG_PASS: ${{ secrets.GPG_PASS }}
