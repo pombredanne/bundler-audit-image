@@ -35,8 +35,9 @@ jobs:
       run: go get github.com/docker/docker-credential-helpers
       continue-on-error: true
     - name: Build docker-credential-helpers
-      run: make pass
-        working-directory: "${GOPATH}/src/github.com/docker/docker-credential-helpers"
+      run: >-
+           cd "${GOPATH}/src/github.com/docker/docker-credential-helpers" &&
+           make pass
     - name: Put docker-credential-pass into $PATH
       run: >-
            sudo cp
