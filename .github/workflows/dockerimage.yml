@@ -15,7 +15,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Prepare tag name
-      run: export IMAGE_TAG="movex/bundler-audit-image:${GITHUB_RUN_NUMBER}_$(date +%s)"
+      run: echo "::set-env name=IMAGE_TAG::movex/bundler-audit-image:${GITHUB_RUN_NUMBER}_$(date +%s)"
     - name: Build the Docker image
       run: >-
            docker build . --file Dockerfile --label GITHUB_REF=${GITHUB_REF}
@@ -29,7 +29,7 @@ jobs:
     - name: Install go for building docker-credential-helpers
       run: sudo snap install --classic go
     - name: Set GOPATH
-      run: export GOPATH="${HOME}/go"
+      run: echo "::set-env name=GOPATH::${HOME}/go"
     - name: Get docker-credential-helpers source
       run: go get github.com/docker/docker-credential-helpers
     - name: Change into docker-credential-helpers dir
