@@ -48,7 +48,7 @@ jobs:
       env:
         GPG_PASS: ${{ secrets.GPG_PASS }}
       run: >-
-           cat << EOF |
+           cat <<EOF | gpg2 --batch --gen-key
            %echo Generating a basic OpenPGP key
            Key-Type: default
            Subkey-Type: default
@@ -59,13 +59,12 @@ jobs:
            Passphrase: ${GPG_PASS}
            %commit
            EOF
-           gpg2 --batch --gen-key
 
     - name: Initialize pass using the created key
       run: pass init "cicd@foo.bar"
     - name: Configure docker credentials store
       run: >-
-           cat >${HOME}/.docker/config.json << EOF
+           cat >${HOME}/.docker/config.json <<EOF
            {
              "credsStore": "pass"
            }
