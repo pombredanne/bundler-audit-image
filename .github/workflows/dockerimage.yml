@@ -41,7 +41,8 @@ jobs:
     - name: Return to working directory
       run: popd
     - name: Generate gpg2 key
-      env: GPG_PASS: ${{ secrets.GPG_PASS }}
+      env:
+        GPG_PASS: ${{ secrets.GPG_PASS }}
       run: >-
            cat << EOF |
            %echo Generating a basic OpenPGP key
@@ -67,7 +68,8 @@ jobs:
            EOF
 
     - name: Login to the docker registry
-      env: HUB_DOCKER_TOKEN: ${{ secrets.HUB_DOCKER_PUSH_BUNDLER_AUDIT_IMAGE_TOKEN }}
+      env:
+        HUB_DOCKER_TOKEN: ${{ secrets.HUB_DOCKER_PUSH_BUNDLER_AUDIT_IMAGE_TOKEN }}
       run: >-
            cat <<< "${HUB_DOCKER_TOKEN}" |
            docker login --username movex --password-stdin
