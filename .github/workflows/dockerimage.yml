@@ -77,6 +77,7 @@ jobs:
       env:
         HUB_DOCKER_TOKEN: ${{ secrets.HUB_DOCKER_PASS }}
       run: |
+           docker logout
            cat <<< "${HUB_DOCKER_TOKEN}" | docker login --username movex --password-stdin
            docker tag "${IMAGE_TAG}" "${IMAGE_TAG_LATEST}"
            docker push "${IMAGE_TAG_LATEST}"
