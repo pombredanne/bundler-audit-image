@@ -64,9 +64,13 @@ jobs:
            gpg2 --batch --gen-key
 
     - name: Initialize pass using the created key
+      env:
+        DOCKER_PASS_INITIALIZED_CHECK_PASS: ${{ secrets.DOCKER_PASS_INITIALIZED_CHECK_PASS }}
       run: |
            pass init "cicd@foo.bar"
-           pass
+           pass insert --echo docker-credential-helpers/docker-pass-initialized-check <<< "${DOCKER_PASS_INITIALIZED_CHECK_PASS}"
+           pass show docker-credential-helpers/docker-pass-initialized-check
+           docker-credential-pass list
     - name: Configure docker credentials store
       run: |
            mkdir -p ${HOME}/.docker && cat >${HOME}/.docker/config.json <<EOF
@@ -79,5 +83,6 @@ jobs:
       env:
         HUB_DOCKER_TOKEN: ${{ secrets.HUB_DOCKER_PASS }}
       run: |
-           cat <<< "${HUB_DOCKER_TOKEN}" | docker login --username movex --password-stdin
+           docker login --username movex --password-stdin <<< "${HUB_DOCKER_TOKEN}"
+           docker-credential-pass list
            docker push "${IMAGE_TAG_LATEST}"
