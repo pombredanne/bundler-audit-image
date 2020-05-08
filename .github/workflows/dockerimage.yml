@@ -80,4 +80,5 @@ jobs:
            docker logout docker.io
            cat <<< "${HUB_DOCKER_TOKEN}" | docker login --username movex --password-stdin docker.io
            docker tag "${IMAGE_TAG}" "${IMAGE_TAG_LATEST}"
+           docker images
            docker push "${IMAGE_TAG_LATEST}"
