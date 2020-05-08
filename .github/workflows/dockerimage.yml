@@ -15,7 +15,9 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Prepare tag name
-      run: echo "::set-env name=IMAGE_TAG::movex/bundler-audit-image:${GITHUB_RUN_NUMBER}_$(date +%s)"
+      run: |
+           echo "::set-env name=IMAGE_TAG::movex/bundler-audit-image:${GITHUB_RUN_NUMBER}_$(date +%s)"
+           echo "::set-env name=IMAGE_TAG_LATEST::movex/bundler-audit-image:latest"
     - name: Build the Docker image
       run: >-
            docker build . --file Dockerfile --label GITHUB_REF=${GITHUB_REF}
@@ -76,4 +78,5 @@ jobs:
         HUB_DOCKER_TOKEN: ${{ secrets.HUB_DOCKER_PASS }}
       run: |
            cat <<< "${HUB_DOCKER_TOKEN}" | docker --log-level=debug login --username movex --password-stdin
+           docker tag "${IMAGE_TAG}" "${IMAGE_TAG_LATEST}"
            docker --log-level=debug push "${IMAGE_TAG}"
