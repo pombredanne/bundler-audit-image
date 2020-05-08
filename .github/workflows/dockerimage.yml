@@ -77,8 +77,10 @@ jobs:
            gpg2 --list-secret-keys
            pass init "cicd@foo.bar"
            pass insert --echo docker-credential-helpers/docker-pass-initialized-check <<< "pass is initialized"
+           echo "check pass"
+           pass
            echo "check docker-pass-initialized-check"
-           pass show docker-credential-helpers/docker-pass-initialized-check <<< "${GPG_PASS}"
+           pass show docker-credential-helpers/docker-pass-initialized-check
            docker-credential-pass list
     - name: Configure docker credentials store
       run: |
