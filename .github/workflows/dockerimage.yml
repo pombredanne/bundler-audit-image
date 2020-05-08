@@ -22,22 +22,21 @@ jobs:
            --label GITHUB_SHA=${GITHUB_SHA} --tag "${IMAGE_TAG}"
     # Use credentials manager for docker. For installation hints see
     # https://github.com/docker/docker-credential-helpers/issues/102
-    - name: Update OS package repository
-      run: sudo apt-get update
-    - name: Install credentials manager, build tools, gpg2
-      run: sudo apt-get install -y --no-install-recommends pass build-essential gnupg2
+    - name: Update OS package repository and install credentials manager, build tools, gpg2
+      run: |
+           sudo apt-get update
+           sudo apt-get install -y --no-install-recommends pass build-essential gnupg2
     - name: Install go for building docker-credential-helpers
       run: sudo snap install --classic go
     - name: Set GOPATH
       run: echo "::set-env name=GOPATH::${HOME}/go"
-    # Ignore "no Go files"
-    - name: Get docker-credential-helpers source
-      run: go get github.com/docker/docker-credential-helpers
-      continue-on-error: true
-    - name: Build docker-credential-helpers
-      run: >-
-           cd "${GOPATH}/src/github.com/docker/docker-credential-helpers" &&
+    - name: Get docker-credential-helpers source and build
+      run: |
+           go get github.com/docker/docker-credential-helpers
+           cd "${GOPATH}/src/github.com/docker/docker-credential-helpers"
            make pass
+      # Ignore "no Go files"
+      continue-on-error: true
     - name: Put docker-credential-pass into $PATH
       run: >-
            sudo cp
@@ -71,12 +70,9 @@ jobs:
            }
            EOF
 
-    - name: Login to the docker registry
+    - name: Login to the docker registry and push
       env:
         HUB_DOCKER_TOKEN: ${{ secrets.HUB_DOCKER_PUSH_BUNDLER_AUDIT_IMAGE_TOKEN }}
-      run: >-
-           cat <<< "${HUB_DOCKER_TOKEN}" |
-           docker login --username movex --password-stdin
-
-    - name: Push to docker hub
-      run: docker push "${IMAGE_TAG}"
+      run: |
+           cat <<< "${HUB_DOCKER_TOKEN}" | docker login --username movex --password-stdin
+           docker push "${IMAGE_TAG}"
