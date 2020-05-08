@@ -75,5 +75,5 @@ jobs:
       env:
         HUB_DOCKER_TOKEN: ${{ secrets.HUB_DOCKER_PUSH_BUNDLER_AUDIT_IMAGE_TOKEN }}
       run: |
-           cat <<< "${HUB_DOCKER_TOKEN}dummytofail" | docker --log-level=debug login --username movex --password-stdin
+           cat <<< "${HUB_DOCKER_TOKEN}" | docker --log-level=debug login --username movex --password-stdin
            docker --log-level=debug push "${IMAGE_TAG}"
