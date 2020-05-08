@@ -79,8 +79,9 @@ jobs:
            pass insert --echo docker-credential-helpers/docker-pass-initialized-check <<< "pass is initialized"
            echo "check pass"
            pass
-           echo "check docker-pass-initialized-check"
-           pass show docker-credential-helpers/docker-pass-initialized-check
+           #echo "check docker-pass-initialized-check"
+           #pass show docker-credential-helpers/docker-pass-initialized-check
+           echo "check docker-credential-pass list"
            docker-credential-pass list
     - name: Configure docker credentials store
       run: |
@@ -95,5 +96,8 @@ jobs:
         HUB_DOCKER_TOKEN: ${{ secrets.HUB_DOCKER_PASS }}
       run: |
            docker login --username movex --password-stdin <<< "${HUB_DOCKER_TOKEN}"
+           echo "check pass"
+           pass
+           echo "check docker-credential-pass"
            docker-credential-pass list
            docker push "${IMAGE_TAG_LATEST}"
