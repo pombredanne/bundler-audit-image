@@ -32,8 +32,8 @@ WORKDIR /usr/src/app
 
 # Do not explicite version, value should hopefully change from 0.6.1 to 0.7.0
 COPY --from=builder /usr/src/app/bundler-audit-*.gem .
-COPY run_bundler_audit.sh /usr/src/run_bundler_audit.sh
+COPY iterate_bundler_audit.sh /usr/src/iterate_bundler_audit.sh
 
 RUN gem install bundler-audit-*.gem
 
-ENTRYPOINT /bin/ash /usr/src/run_bundler_audit.sh
+ENTRYPOINT /bin/ash /usr/src/iterate_bundler_audit.sh

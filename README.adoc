@@ -17,14 +17,15 @@ git clone <project> <2>
 
 == Usage
 
-Identify the `Gemfile.lock` of your application.
-Run the docker container mounting the volume with your `Gemfile.lock` into
+Check all gemfile lock files of your application by running the docker container.
+
+Run the docker container mounting the volume with your gemfile lock files into
 `/usr/src/app`.
 
 [source,bash]
 ----
 docker run --rm -v /path/to/your/app:/usr/src/app \
-  movex/bundler-audit-image:master_latest
+  movex/bundler-audit-image:latest
 ----
 
 Or directly from directory with gemfiles
@@ -32,17 +33,22 @@ Or directly from directory with gemfiles
 [source,bash]
 ----
 docker run --rm -v "${PWD}":/usr/src/app \
-  movex/bundler-audit-image:master_latest
+  movex/bundler-audit-image:latest
 ----
 
-If the lock file has a different name use environment variable `GEMFILE_LOCK`
-to provide that name.
+The lock files may be contained in sub directories.
+
+The default lock file pattern is `Gemfile*.lock`.
+If the lock file matches a different name pattern use environment variable
+`GEMFILE_LOCK_PATTERN` to provide that name pattern.
+The pattern may contain asterisks.
 
 [source,bash]
 ----
 PATH_TO_APP=/path/to/your/app
-GEMFILE_LOCK=GemfileWithDifferentName.lock
-docker run --rm -v ${PATH_TO_APP}:/usr/src/app -e GEMFILE_LOCK=${GEMFILE_LOCK} \
+GEMFILE_LOCK_PATTERN=GemfileWithSpecialPattern*.lock
+docker run --rm -v ${PATH_TO_APP}:/usr/src/app \
+  -e GEMFILE_LOCK_PATTERN=${GEMFILE_LOCK_PATTERN} \
   movex/bundler-audit-image:master_latest
 ----
 
