@@ -76,6 +76,6 @@ jobs:
     - name: Login to the docker registry and push
       env:
         HUB_DOCKER_TOKEN: ${{ secrets.HUB_DOCKER_PASS }}
-      run: |
-           cat <<< "${HUB_DOCKER_TOKEN}" | docker login --username movex --password-stdin
+      run: >-
+           cat <<< "${HUB_DOCKER_TOKEN}" | docker login --username movex --password-stdin &&
            docker push "${IMAGE_TAG_LATEST}"
