@@ -64,7 +64,9 @@ jobs:
            gpg2 --batch --gen-key
 
     - name: Initialize pass using the created key
-      run: pass init "cicd@foo.bar"
+      run: |
+           pass init "cicd@foo.bar"
+           pass
     - name: Configure docker credentials store
       run: |
            mkdir -p ${HOME}/.docker && cat >${HOME}/.docker/config.json <<EOF
@@ -76,6 +78,6 @@ jobs:
     - name: Login to the docker registry and push
       env:
         HUB_DOCKER_TOKEN: ${{ secrets.HUB_DOCKER_PASS }}
-      run: >-
-           cat <<< "${HUB_DOCKER_TOKEN}" | docker login --username movex --password-stdin &&
+      run: |
+           cat <<< "${HUB_DOCKER_TOKEN}" | docker login --username movex --password-stdin
            docker push "${IMAGE_TAG_LATEST}"
