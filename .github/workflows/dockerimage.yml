@@ -105,4 +105,4 @@ jobs:
       # Temporarily ignore failing docker push for debugging
       continue-on-error: true
     - name: Show docker service logs for debugging
-      run: journalctl -u docker.service
+      run: sudo journalctl -u docker.service
