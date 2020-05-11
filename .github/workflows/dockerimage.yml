@@ -16,8 +16,8 @@ jobs:
     - uses: actions/checkout@v2
     - name: Prepare tag name
       run: |
-           echo "::set-env name=IMAGE_TAG::docker.io/movex/bundler-audit-image:${GITHUB_RUN_NUMBER}_$(date +%s)"
-           echo "::set-env name=IMAGE_TAG_LATEST::docker.io/movex/bundler-audit-image"
+           echo "::set-env name=IMAGE_TAG::movex/bundler-audit-image:${GITHUB_RUN_NUMBER}_$(date +%s)"
+           echo "::set-env name=IMAGE_TAG_LATEST::movex/bundler-audit-image"
     - name: Build the Docker image
       run: >-
            docker build . --file Dockerfile --label GITHUB_REF=${GITHUB_REF}
@@ -95,15 +95,9 @@ jobs:
       env:
         HUB_DOCKER_TOKEN: ${{ secrets.HUB_DOCKER_PASS }}
       run: |
-           docker logout docker.io
-           docker -D -l=debug login --username movex --password-stdin docker.io <<< "${HUB_DOCKER_TOKEN}"
+           docker login --username movex --password-stdin <<< "${HUB_DOCKER_TOKEN}"
            echo "check pass"
            pass
            echo "check docker-credential-pass"
            docker-credential-pass list
-           # TODO: remove debug with journalctl
-           docker -D -l=debug push "${IMAGE_TAG_LATEST}"
-      # Temporarily ignore failing docker push for debugging
-      continue-on-error: true
-    - name: Show docker service logs for debugging
-      run: sudo journalctl -u docker.service
+           docker push "${IMAGE_TAG_LATEST}"
