@@ -83,13 +83,14 @@ jobs:
            #pass show docker-credential-helpers/docker-pass-initialized-check
            echo "check docker-credential-pass list"
            docker-credential-pass list
-    - name: Configure docker credentials store
-      run: |
-           mkdir -p ${HOME}/.docker && cat >${HOME}/.docker/config.json <<EOF
-           {
-             "credsStore": "pass"
-           }
-           EOF
+    # Try without pass
+    #- name: Configure docker credentials store
+    #  run: |
+    #       mkdir -p ${HOME}/.docker && cat >${HOME}/.docker/config.json <<EOF
+    #       {
+    #         "credsStore": "pass"
+    #       }
+    #       EOF
 
     - name: Login to the docker registry and push
       env:
