@@ -49,7 +49,7 @@ PATH_TO_APP=/path/to/your/app
 GEMFILE_LOCK_PATTERN=GemfileWithSpecialPattern*.lock
 docker run --rm -v ${PATH_TO_APP}:/usr/src/app \
   -e GEMFILE_LOCK_PATTERN=${GEMFILE_LOCK_PATTERN} \
-  movex/bundler-audit-image:master_latest
+  movex/bundler-audit-image:latest
 ----
 
 == References
