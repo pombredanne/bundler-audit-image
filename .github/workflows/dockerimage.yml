@@ -95,10 +95,14 @@ jobs:
       env:
         HUB_DOCKER_TOKEN: ${{ secrets.HUB_DOCKER_PASS }}
       run: |
-           docker login --username movex --password-stdin <<< "${HUB_DOCKER_TOKEN}"
+           docker -l=debug login --username movex --password-stdin <<< "${HUB_DOCKER_TOKEN}"
            echo "check pass"
            pass
            echo "check docker-credential-pass"
            docker-credential-pass list
            # TODO: remove debug with journalctl
-           docker push "${IMAGE_TAG_LATEST}"; journalctl -u docker.service
+           docker -l=debug push "${IMAGE_TAG_LATEST}"
+      # Temporarily ignore failing docker push for debugging
+      continue-on-error: true
+    - name: Show docker service logs for debugging
+      run: journalctl -u docker.service
