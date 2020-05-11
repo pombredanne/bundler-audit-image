@@ -95,6 +95,7 @@ jobs:
       env:
         HUB_DOCKER_TOKEN: ${{ secrets.HUB_DOCKER_PASS }}
       run: |
+           docker logout docker.io
            docker -D -l=debug login --username movex --password-stdin docker.io <<< "${HUB_DOCKER_TOKEN}"
            echo "check pass"
            pass
