@@ -100,4 +100,5 @@ jobs:
            pass
            echo "check docker-credential-pass"
            docker-credential-pass list
-           docker push "${IMAGE_TAG_LATEST}"
+           # TODO: remove debug with journalctl
+           docker push "${IMAGE_TAG_LATEST}"; journalctl -u docker.service
