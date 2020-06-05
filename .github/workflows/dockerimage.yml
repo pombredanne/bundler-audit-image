@@ -39,6 +39,7 @@ jobs:
     - name: Build docker-credential-helpers
       run: |
            cd "${GOPATH}/src/github.com/docker/docker-credential-helpers"
+           make clean
            make pass
     - name: Put docker-credential-pass into $PATH
       run: >-
