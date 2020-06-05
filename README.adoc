@@ -1,7 +1,7 @@
 = bundler-audit-image
 Otto Group Solution Provider (OSP) GmbH
 
-Docker image for Ruby gem build-audit
+Docker image for Ruby gem bundler-audit
 
 == Initializing
 
@@ -17,7 +17,14 @@ git clone <project> <2>
 
 == Usage
 
-Check all gemfile lock files of your application by running the docker container.
+A bundle audit will output vulnerabilities on `STDOUT`.
+If at least one vulnerability was found, the return code of the command will
+differ from `0`.
+
+=== Bundle audit a directory
+
+Check all gemfile lock files of your application by running the
+bundler-audit-image docker container.
 
 Run the docker container mounting the volume with your gemfile lock files into
 `/usr/src/app`.
@@ -51,6 +58,53 @@ docker run --rm -v ${PATH_TO_APP}:/usr/src/app \
   -e GEMFILE_LOCK_PATTERN=${GEMFILE_LOCK_PATTERN} \
   movex/bundler-audit-image:latest
 ----
+
+=== Bundle audit a docker image
+
+Check all gemfile lock files of your docker image by running a
+bundler-audit-image docker container.
+This requires the image to be checked to provide `sh`.
+
+Extract the shell script from the bundler-audit-image docker image
+and make it executable.
+
+[source,bash]
+----
+docker run --rm --entrypoint sh \
+movex/bundler-audit-image:latest -c \
+'cat /usr/local/bin/docker_image_bundler_audit.sh' \
+> docker_image_bundler_audit.sh
+chmod +x docker_image_bundler_audit.sh
+----
+
+Call the script with environment variable `docker_image` containing the docker
+image name.
+Optionally provide the name of the bundler-audit-image docker image in
+environment variable `bundle_audit_image`.
+Default is `movex/bundler-audit-image:latest`.
+
+[source,bash]
+----
+export docker_image=my_image:latest
+export bundle_audit_image=movex/bundler-audit-image:latest
+./docker_image_bundler_audit.sh
+----
+
+The default lock file pattern is `Gemfile*.lock`.
+If the lock file matches a different name pattern use environment variable
+`GEMFILE_LOCK_PATTERN` to provide that name pattern.
+The pattern may contain asterisks.
+
+[source,bash]
+----
+export docker_image=my_image:latest
+export GEMFILE_LOCK_PATTERN=GemfileMyPattern*.lock
+./docker_image_bundler_audit.sh
+----
+
+== Development
+
+TODO: document development process
 
 == References
 

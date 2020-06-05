@@ -31,9 +31,12 @@ RUN bundle config --global frozen 1
 WORKDIR /usr/src/app
 
 # Do not explicite version, value should hopefully change from 0.6.1 to 0.7.0
-COPY --from=builder /usr/src/app/bundler-audit-*.gem .
-COPY iterate_bundler_audit.sh /usr/src/iterate_bundler_audit.sh
+COPY --from=builder /usr/src/app/bundler-audit-*.gem /usr/src/gems/
+COPY iterate_bundle_audit_list.sh /usr/local/bin/iterate_bundle_audit_list.sh
+COPY iterate_bundler_audit.sh /usr/local/bin/iterate_bundler_audit.sh
+COPY docker_image_bundler_audit.sh /usr/local/bin/docker_image_bundler_audit.sh
+COPY tar_bundler_audit.sh /usr/local/bin/tar_bundler_audit.sh
 
-RUN gem install bundler-audit-*.gem
+RUN gem install /usr/src/gems/bundler-audit-*.gem
 
-ENTRYPOINT /bin/ash /usr/src/iterate_bundler_audit.sh
+ENTRYPOINT /bin/ash /usr/local/bin/iterate_bundler_audit.sh
