@@ -33,7 +33,7 @@ jobs:
     - name: Set GOPATH
       run: |
            echo "::set-env name=GOPATH::${HOME}/go"
-           echo "::set-env name=GOROOT::/snap/bin/go"
+           echo "::set-env name=GOROOT::/snap"
            echo "::set-env name=PATH::${PATH}:${GOROOT}/bin"
     - name: Get docker-credential-helpers source
       run: go get github.com/docker/docker-credential-helpers
