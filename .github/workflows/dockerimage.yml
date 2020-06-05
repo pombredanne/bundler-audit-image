@@ -31,7 +31,10 @@ jobs:
     - name: Install go for building docker-credential-helpers
       run: sudo snap install --classic go
     - name: Set GOPATH
-      run: echo "::set-env name=GOPATH::${HOME}/go"
+      run: |
+           echo "::set-env name=GOPATH::${HOME}/go"
+           echo "::set-env name=GOROOT::/snap/bin/go"
+           echo "::set-env name=PATH::${PATH}:${GOROOT}/bin"
     - name: Get docker-credential-helpers source
       run: go get github.com/docker/docker-credential-helpers
       # Ignore "no Go files"
@@ -39,7 +42,6 @@ jobs:
     - name: Build docker-credential-helpers
       run: |
            cd "${GOPATH}/src/github.com/docker/docker-credential-helpers"
-           which go
            make pass
     - name: Put docker-credential-pass into $PATH
       run: >-
