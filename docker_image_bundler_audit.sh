@@ -15,5 +15,5 @@ fi
 # Create container from image to be checked,
 # export gemfiles and lock files as tar ignoring errors,
 # extract them in bundle-audit-image container and check
-cmd_tar="find / \\( -name \"Gemfile\" -o -name \"${GEMFILE_LOCK_PATTERN}\" \\) -exec tar -c -T {} 2>/dev/null \+"
+cmd_tar="find / -type f \\( -name \"Gemfile\" -o -name \"${GEMFILE_LOCK_PATTERN}\" \\) -exec tar -c {} \+ 2>/dev/null"
 docker run --rm --entrypoint sh ${docker_image} -c "${cmd_tar}" | docker run --rm -i --entrypoint sh "${bundle_audit_image}" -c "tar_bundler_audit.sh"
