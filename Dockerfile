@@ -12,8 +12,8 @@ RUN bundle config --global frozen 1
 WORKDIR /usr/src/app
 
 RUN git clone https://github.com/rubysec/bundler-audit.git .
-# TODO: use master when it can correctly handle new thor in monolith
-RUN git checkout 0.7.0
+# No explicite checkout, use master
+RUN git submodule update --init
 
 RUN gem build bundler-audit.gemspec
 
@@ -28,9 +28,11 @@ RUN apk update \
 # Throw errors if Gemfile has been modified since Gemfile.lock
 RUN bundle config --global frozen 1
 
+RUN mkdir /usr/src/laboratory
+# Create dummy Gemfile, otherwise audit will fail
+RUN touch /usr/src/laboratory/Gemfile
 WORKDIR /usr/src/app
 
-# Do not explicite version, value should hopefully change from 0.6.1 to 0.7.0
 COPY --from=builder /usr/src/app/bundler-audit-*.gem /usr/src/gems/
 COPY iterate_bundle_audit_list.sh /usr/local/bin/iterate_bundle_audit_list.sh
 COPY iterate_bundler_audit.sh /usr/local/bin/iterate_bundler_audit.sh

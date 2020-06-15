@@ -2,6 +2,8 @@
 # Iterates over a list of gemfile lock files provided as array argument.
 # Returns 0 if no vulnerability was found. Otherwise returns an error code.
 gemfile_list="${@}"
+laboratory='/usr/src/laboratory'
+lab_gemfile_lock="${laboratory}/Gemfile.lock"
 
 iterate_bundle_audit_check(){
   result=0
@@ -20,10 +22,14 @@ iterate_bundle_audit_check(){
 bundle_audit_check(){
   echo "Bundle audit check file: ${1}"
   gemfile_lock="$(realpath ${1})"
+  # copy and rename gemfile and its lock file
+  cp "${gemfile_lock}" "${lab_gemfile_lock}"
   old_dir=$(pwd)
-  cd "$(dirname ${gemfile_lock})"
-  bundle-audit check --gemfile-lock="$(basename ${gemfile_lock})"
+  cd "${laboratory}"
+  bundle-audit check
   rc=$?
+  # clean up laboratory
+  rm "${lab_gemfile_lock}"
   cd ${old_dir}
   return ${rc}
 }
